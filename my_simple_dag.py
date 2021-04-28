@@ -6,11 +6,7 @@ from airflow.operators.python_operator import PythonOperator
 
 
 def greet():
-    print('Writing in file')
-    with open('/Development/airflow_tutorial/greet.txt', 'a+', encoding='utf8') as f:
-        now = dt.datetime.now()
-        t = now.strftime("%Y-%m-%d %H:%M")
-        f.write(str(t) + '\n')
+    print('Write in file')
     return 'Greeted'
 
 
