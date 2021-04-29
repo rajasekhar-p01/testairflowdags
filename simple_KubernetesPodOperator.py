@@ -36,7 +36,7 @@ for task in tasks:
 
     org_node = KubernetesPodOperator(
         namespace='kube-node-lease',
-        image="testcontainerkubernetraja.azurecr.io/hello-world",
+        image="testcontainerkubernetraja.azurecr.io/samplepythondocker",
         image_pull_secrets='testcontainerkubernetraja',
         cmds=[],
         arguments=[],
