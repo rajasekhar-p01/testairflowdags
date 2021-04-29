@@ -37,7 +37,7 @@ for task in tasks:
     org_node = KubernetesPodOperator(
         namespace='kube-node-lease',
         image="testcontainerkubernetraja.azurecr.io/hello-world",
-        imagePullSecrets:"testcontainerkubernetraja",
+        image_pull_secrets:"testcontainerkubernetraja",
         cmds=["echo"],
         arguments=["print('HELLO')"],
         labels={"foo": "bar"},
