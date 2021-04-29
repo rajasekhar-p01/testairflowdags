@@ -18,7 +18,7 @@ default_args = {
 }
 
 dag = DAG(
-    'dag_that_executes_via_KubernetesPodOperator',
+    'simple_KubernetesPodOperator',
     default_args=default_args,
     schedule_interval=timedelta(minutes=30),
     max_active_runs=1,
