@@ -1,41 +1,52 @@
-import datetime as dt
+from datetime import timedelta
 
 from airflow import DAG
-from airflow.operators.bash_operator import BashOperator
-from airflow.operators.python_operator import PythonOperator
-
-
-def greet():
-    print('Yet to Write in file')
-    return 'Greeted'
-
-
-def respond():
-    return 'Greet Responded Again'
-
+from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOperator
+from airflow.operators.dummy_operator import DummyOperator
+from airflow.utils.dates import days_ago
 
 default_args = {
-    'owner': 'airflow',
-    'start_date': dt.datetime(2018, 9, 24, 10, 00, 00),
-    'concurrency': 1,
-    'retries': 0
+    'owner': 'Airflow',
+    'depends_on_past': False,
+    'start_date': days_ago(0),
+    'catchup': False,
+    'email': ['airflow@example.com'],
+    'email_on_failure': False,
+    'email_on_retry': False,
+    'retries': 0,
+    'retry_delay': timedelta(minutes=5),
 }
 
-with DAG('another_simple_dag',
-         catchup=False,
-         default_args=default_args,
-         schedule_interval='*/10 * * * *',
-         # schedule_interval=None,
-         ) as dag:
-    opr_hello = BashOperator(task_id='say_Hi',
-                             bash_command='echo "Hi!!"')
+dag = DAG(
+    'dag_that_executes_via_KubernetesPodOperator',
+    default_args=default_args,
+    schedule_interval=timedelta(minutes=30),
+    max_active_runs=1,
+    concurrency=10
+)
 
-    opr_greet = PythonOperator(task_id='greet',
-                               python_callable=greet)
-    opr_sleep = BashOperator(task_id='sleep_me',
-                             bash_command='sleep 5')
+# Generate 2 tasks
+tasks = ["task{}".format(i) for i in range(1, 3)]
+example_dag_complete_node = DummyOperator(task_id="example_dag_complete", dag=dag)
 
-    opr_respond = PythonOperator(task_id='respond',
-                                 python_callable=respond)
+org_dags = []
+for task in tasks:
 
-opr_hello >> opr_greet >> opr_sleep >> opr_respond
+    bash_command = 'echo HELLO'
+
+    org_node = KubernetesPodOperator(
+        namespace='kube-node-lease',
+        image="testcontainerkubernetraja.azurecr.io/hello-world",
+        imagePullSecrets:"testcontainerkubernetraja",
+        cmds=["echo"],
+        arguments=["print('HELLO')"],
+        labels={"foo": "bar"},
+        image_pull_policy="Always",
+        name=task,
+        task_id=task,
+        is_delete_operator_pod=False,
+        get_logs=True,
+        dag=dag
+    )
+
+    org_node.set_downstream(example_dag_complete_node)
