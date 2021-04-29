@@ -38,7 +38,7 @@ for task in tasks:
         namespace='kube-node-lease',
         image="testcontainerkubernetraja.azurecr.io/argspython",
         image_pull_secrets='testcontainerkubernetraja',
-        cmds=[],
+        cmds=["python","name.py"],
         arguments=["First","Second","Third"],
         labels={"foo": "bar"},
         image_pull_policy="Always",
