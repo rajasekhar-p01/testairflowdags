@@ -35,7 +35,7 @@ for task in tasks:
     bash_command = 'echo HELLO'
 
     org_node = KubernetesPodOperator(
-        namespace='kube-node-lease',
+        namespace='default',
         image="python",
         cmds=["python", "-c"],
         arguments=["print('HELLO')"],
