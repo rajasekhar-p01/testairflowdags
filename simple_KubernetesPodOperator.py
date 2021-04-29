@@ -39,7 +39,7 @@ for task in tasks:
         image="testcontainerkubernetraja.azurecr.io/hello-world",
         image_pull_secrets='testcontainerkubernetraja',
         cmds=[],
-        arguments=["print('HELLO')"],
+        arguments=[],
         labels={"foo": "bar"},
         image_pull_policy="Always",
         name=task,
