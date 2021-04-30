@@ -1,5 +1,5 @@
 import datetime as dt
-
+import time
 from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
 from airflow.operators.python_operator import PythonOperator
@@ -7,6 +7,8 @@ from airflow.operators.python_operator import PythonOperator
 
 def greet():
     print('Write in file')
+    print('Sleep 90 seconds')
+    time.sleep(90)
     return 'Greeted'
 
 
