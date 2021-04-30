@@ -26,7 +26,7 @@ dag = DAG(
 )
 
 # Generate 2 tasks
-tasks = ["task{}".format(i) for i in range(1, 3)]
+tasks = ["task{}".format(i) for i in range(1, 5)]
 example_dag_complete_node = DummyOperator(task_id="example_dag_complete", dag=dag)
 
 org_dags = []
