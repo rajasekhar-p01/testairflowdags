@@ -22,7 +22,7 @@ dag = DAG(
     default_args=default_args,
     schedule_interval=timedelta(minutes=30),
     max_active_runs=1,
-    concurrency=10
+    concurrency=3
 )
 
 # Generate 2 tasks
