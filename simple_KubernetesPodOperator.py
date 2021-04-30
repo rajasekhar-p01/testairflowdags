@@ -21,7 +21,7 @@ dag = DAG(
     'simple_KubernetesPodOperator',
     default_args=default_args,
     schedule_interval=timedelta(minutes=30),
-    max_active_runs=1,
+    max_active_runs=2,
     concurrency=10
 )
 
