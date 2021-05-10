@@ -22,7 +22,7 @@ dag = DAG(
     default_args=default_args,
     schedule_interval=None,
     max_active_runs=3,
-    concurrency=10
+    concurrency=5
 )
 
 # Generate 4 tasks
