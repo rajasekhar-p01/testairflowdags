@@ -44,7 +44,7 @@ for python_task in tasks:
         image_pull_policy="Always",
         name=python_task,
         task_id=python_task,
-        is_delete_operator_pod=False,
+        is_delete_operator_pod=True,
         get_logs=True,
         dag=dag
     )
