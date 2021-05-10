@@ -21,7 +21,7 @@ dag = DAG(
     'callPythonModule_Task_5To8',
     default_args=default_args,
     schedule_interval=None,
-    max_active_runs=1,
+    max_active_runs=3,
     concurrency=10
 )
 
