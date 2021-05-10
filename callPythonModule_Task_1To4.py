@@ -20,8 +20,7 @@ default_args = {
 dag = DAG(
     'callPythonModule_Task_1To4',
     default_args=default_args,
-    schedule_interval=None,
-    concurrency=10
+    schedule_interval=None
 )
 
 # Generate 4 tasks
