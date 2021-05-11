@@ -48,7 +48,7 @@ python_pull_secret = PythonOperator(task_id="python_pull_secret", provide_contex
 
 org_dags = []
 for python_task in tasks:
-    source_objects=["{{ task_instance.xcom_pull(task_ids='get_file_name') }}"]
+    source_objects=["{{ task_instance.xcom_pull(task_ids='python_pull_secret') }}"]
     print("source", source_objects)
     bash_command = 'echo HELLO'
     #task_instance = context['task_instance']
