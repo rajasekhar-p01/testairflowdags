@@ -53,7 +53,7 @@ for python_task in tasks:
         image="testcontainerkubernetraja.azurecr.io/argspython",
         image_pull_secrets='testcontainerkubernetraja',
         cmds=["python","name.py"],
-        arguments=[{secret_value_op},"Second","Third"],
+        arguments=["First","Second","Third"],
         labels={"foo": "bar"},
         image_pull_policy="Always",
         name=python_task,
