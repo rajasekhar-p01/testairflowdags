@@ -38,9 +38,8 @@ def pull_secret_value():
     print(f"Your secret is '{retrieved_secret.value}'.")
     secret_value_op = retrieved_secret.value
     #xcom_push(key='secretname3', value = retrieved_secret.value)
-    Variable.set(retrieved_secret.value, secret_value_op)
-    #return retrieved_secret.value
-    return secret_value_op
+    #Variable.set(retrieved_secret.value, secret_value_op)
+    return retrieved_secret.value
 
 # Generate 4 tasks
 tasks = ["task{}".format(i) for i in range(50, 55)]
@@ -60,7 +59,7 @@ for python_task in tasks:
         image="testcontainerkubernetraja.azurecr.io/argspython",
         image_pull_secrets='testcontainerkubernetraja',
         cmds=["python","name.py"],
-        arguments=[{secret_value_op},"Raja","Sekhar"],
+        arguments=[secret_value_op,"Raja","Sekhar"],
         labels={"foo": "bar"},
         image_pull_policy="Always",
         name=python_task,
