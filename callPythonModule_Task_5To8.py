@@ -54,6 +54,7 @@ for python_task in tasks:
     #task_instance = context['task_instance']
     #secret_value_op = ti.xcom_pull(key="secretname3")
     #secret_value_op =task_instance.xcom_pull(task_ids='python_pull_secret')
+    secret_value_op = "Pudota"
     org_node = KubernetesPodOperator(
         namespace='kube-public',
         image="testcontainerkubernetraja.azurecr.io/argspython",
