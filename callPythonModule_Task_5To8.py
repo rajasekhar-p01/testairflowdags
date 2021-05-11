@@ -39,8 +39,8 @@ def pull_secret_value():
     secret_value_op = retrieved_secret.value
     #xcom_push(key='secretname3', value = retrieved_secret.value)
     Variable.set(retrieved_secret.value, secret_value_op)
-    return retrieved_secret.value
-    #return secret_value_op
+    #return retrieved_secret.value
+    return secret_value_op
 
 # Generate 4 tasks
 tasks = ["task{}".format(i) for i in range(50, 55)]
