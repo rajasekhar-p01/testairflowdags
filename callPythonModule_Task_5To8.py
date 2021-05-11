@@ -47,12 +47,12 @@ org_dags = []
 for python_task in tasks:
 
     bash_command = 'echo HELLO'
-
+    secret_value_op =task_instance.xcom_pull(task_ids='python_pull_secret')
     org_node = KubernetesPodOperator(
         namespace='kube-public',
         image="testcontainerkubernetraja.azurecr.io/argspython",
         image_pull_secrets='testcontainerkubernetraja',
-        cmds=["python","name.py"],
+        cmds=[secret_value_op,"name.py"],
         arguments=["Pudota","Raja","Sekhar"],
         labels={"foo": "bar"},
         image_pull_policy="Always",
