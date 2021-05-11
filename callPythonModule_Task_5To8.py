@@ -37,9 +37,9 @@ def pull_secret_value():
     return retrieved_secret.value
 
 # Generate 4 tasks
-tasks = ["task{}".format(i) for i in range(50, 80)]
-#example_dag_complete_node = DummyOperator(task_id="example_dag_complete", dag=dag)
-example_dag_complete_node = PythonOperator(task_id="example_dag_complete", python_callable=pull_secret_value)
+tasks = ["task{}".format(i) for i in range(50, 60)]
+example_dag_complete_node = DummyOperator(task_id="example_dag_complete", dag=dag)
+python_pull_secret = PythonOperator(task_id="example_dag_complete", python_callable=pull_secret_value)
 
 org_dags = []
 for python_task in tasks:
@@ -60,5 +60,6 @@ for python_task in tasks:
         get_logs=True,
         dag=dag
     )
-
+    
+    org_node.set_upstream(python_pull_secret)
     org_node.set_downstream(example_dag_complete_node)
