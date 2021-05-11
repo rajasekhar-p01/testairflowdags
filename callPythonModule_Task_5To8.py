@@ -47,7 +47,7 @@ example_dag_complete_node = DummyOperator(task_id="example_dag_complete", dag=da
 python_pull_secret = PythonOperator(task_id="python_pull_secret", python_callable=pull_secret_value, xcom_push=True)
 
 secret_info = pull_secret_value(python_pull_secret.output)
-
+abc=secret_info['subject']
 org_dags = []
 for python_task in tasks:
     
@@ -60,7 +60,7 @@ for python_task in tasks:
         image="testcontainerkubernetraja.azurecr.io/argspython",
         image_pull_secrets='testcontainerkubernetraja',
         cmds=["python","name.py"],
-        arguments=[secret_info['subject'],"Raja","Sekhar"],
+        arguments=[abc,"Raja","Sekhar"],
         labels={"foo": "bar"},
         image_pull_policy="Always",
         name=python_task,
