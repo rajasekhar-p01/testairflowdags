@@ -37,14 +37,14 @@ def pull_secret_value():
     retrieved_secret = client.get_secret(secretName)
     print(f"Your secret is '{retrieved_secret.value}'.")
     secret_value_op = retrieved_secret.value
-    ti.xcom_push(key='secretname4', value = 'sspp')
+    ti.xcom_push(key='secretname3', value = 'sspp')
     #Variable.set(retrieved_secret.value, secret_value_op)
     #return retrieved_secret.value
 
 # Generate 4 tasks
 tasks = ["task{}".format(i) for i in range(50, 55)]
 example_dag_complete_node = DummyOperator(task_id="example_dag_complete", dag=dag)
-python_pull_secret = PythonOperator(task_id="python_pull_secret", python_callable=pull_secret_value,ti.xcom_push(key="secretname3", value = "sspp"), dag=dag)
+python_pull_secret = PythonOperator(task_id="python_pull_secret", python_callable=pull_secret_value)
 
 
 org_dags = []
@@ -55,12 +55,15 @@ for python_task in tasks:
     #secret_value_op = ti.xcom_pull(key="secretname3")
     #secret_value_op =task_instance.xcom_pull(task_ids='python_pull_secret')
     secret_value_op = ti.xcom_pull(key="secretname3")
+    print(f"secret_value_op '{secret_value_op}'.")
+    secret_value_op_r = ti.xcom_pull(key="return_value")
+    print(f"secret_value_op_r '{secret_value_op_r}'.")
     org_node = KubernetesPodOperator(
         namespace='kube-public',
         image="testcontainerkubernetraja.azurecr.io/argspython",
         image_pull_secrets='testcontainerkubernetraja',
         cmds=["python","name.py"],
-        arguments=[secret_value_op,"Raja","Sekhar"],
+        arguments=["Pudota","Raja","Sekhar"],
         labels={"foo": "bar"},
         image_pull_policy="Always",
         name=python_task,
