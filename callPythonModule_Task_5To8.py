@@ -41,16 +41,18 @@ def pull_secret_value(**kwargs):
     ti.xcom_push(key='secretname3', value = 'sspp')
     #Variable.set(retrieved_secret.value, secret_value_op)
     #return retrieved_secret.value
+    return { 'subject': 'secret'}
 
 # Generate 4 tasks
 tasks = ["task{}".format(i) for i in range(50, 55)]
 example_dag_complete_node = DummyOperator(task_id="example_dag_complete", dag=dag)
-python_pull_secret = PythonOperator(task_id="python_pull_secret", python_callable=pull_secret_value, provide_context=True)
+python_pull_secret = PythonOperator(task_id="python_pull_secret", python_callable=pull_secret_value, xcom_push=True)
 
+secret_info = pull_secret_value(python_pull_secret.output)
 
 org_dags = []
 for python_task in tasks:
-
+    
     bash_command = 'echo HELLO'
     #task_instance = context['task_instance']
     #secret_value_op = ti.xcom_pull(key="secretname3")
@@ -60,7 +62,7 @@ for python_task in tasks:
         image="testcontainerkubernetraja.azurecr.io/argspython",
         image_pull_secrets='testcontainerkubernetraja',
         cmds=["python","name.py"],
-        arguments=["Pudota","Raja","Sekhar"],
+        arguments=[secret_info['subject'],"Raja","Sekhar"],
         labels={"foo": "bar"},
         image_pull_policy="Always",
         name=python_task,
