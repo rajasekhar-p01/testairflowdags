@@ -36,7 +36,8 @@ def pull_secret_value():
     retrieved_secret = client.get_secret(secretName)
     print(f"Your secret is '{retrieved_secret.value}'.")
     secret_value_op = retrieved_secret.value
-    return retrieved_secret.value
+    #return retrieved_secret.value
+    return secret_value_op
 
 # Generate 4 tasks
 tasks = ["task{}".format(i) for i in range(50, 55)]
@@ -48,8 +49,8 @@ org_dags = []
 for python_task in tasks:
 
     bash_command = 'echo HELLO'
-    task_instance = context['task_instance']
-    secret_value_op =task_instance.xcom_pull(task_ids='python_pull_secret')
+    #task_instance = context['task_instance']
+    #secret_value_op =task_instance.xcom_pull(task_ids='python_pull_secret')
     org_node = KubernetesPodOperator(
         namespace='kube-public',
         image="testcontainerkubernetraja.azurecr.io/argspython",
