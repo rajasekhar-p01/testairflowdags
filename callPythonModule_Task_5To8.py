@@ -29,7 +29,8 @@ dag = DAG(
     start_date=days_ago(0)
 )
 
-def pull_secret_value():
+def pull_secret_value(**kwargs):
+    ti = kwargs['ti']
     KVUri = f"https://airflow-keyvault-3.vault.azure.net"
     credential = ClientSecretCredential('d3c91205-02f7-4bba-bd33-0fde50b3a8b4', '0a34166b-75ea-45c5-89a1-b2f62b9ca602', 'e~scpuZ5R-65ueaItpAReX0T-6~kV-j~HU')
     client = SecretClient(vault_url=KVUri, credential=credential)
@@ -44,7 +45,7 @@ def pull_secret_value():
 # Generate 4 tasks
 tasks = ["task{}".format(i) for i in range(50, 55)]
 example_dag_complete_node = DummyOperator(task_id="example_dag_complete", dag=dag)
-python_pull_secret = PythonOperator(task_id="python_pull_secret", python_callable=pull_secret_value)
+python_pull_secret = PythonOperator(task_id="python_pull_secret", python_callable=pull_secret_value, provide_context=True)
 
 
 org_dags = []
@@ -54,19 +55,16 @@ for python_task in tasks:
     #task_instance = context['task_instance']
     #secret_value_op = ti.xcom_pull(key="secretname3")
     #secret_value_op =task_instance.xcom_pull(task_ids='python_pull_secret')
-    secret_value_op = ti.xcom_pull(key="secretname3")
-    print(f"secret_value_op '{secret_value_op}'.")
-    secret_value_op_r = ti.xcom_pull(key="return_value")
-    print(f"secret_value_op_r '{secret_value_op_r}'.")
     org_node = KubernetesPodOperator(
         namespace='kube-public',
         image="testcontainerkubernetraja.azurecr.io/argspython",
         image_pull_secrets='testcontainerkubernetraja',
         cmds=["python","name.py"],
-        arguments=["Pudota","Raja","Sekhar"],
+        arguments=[do_xcom_pull(key="secretname3"),"Raja","Sekhar"],
         labels={"foo": "bar"},
         image_pull_policy="Always",
         name=python_task,
+        do_xcom_pull=True,
         task_id=python_task,
         is_delete_operator_pod=True,
         get_logs=True,
