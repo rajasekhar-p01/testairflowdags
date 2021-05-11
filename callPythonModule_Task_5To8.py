@@ -23,7 +23,8 @@ default_args = {
 dag = DAG(
     'callPythonModule_Task_5To8',
     default_args=default_args,
-    schedule_interval=None
+    schedule_interval=None,
+    start_date=days_ago(0)
 )
 
 def pull_secret_value():
