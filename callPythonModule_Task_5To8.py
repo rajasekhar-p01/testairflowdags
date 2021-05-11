@@ -38,8 +38,7 @@ def pull_secret_value(ds, **kwargs):
     print(f"Your secret is '{retrieved_secret.value}'.")
     secret_value_op = retrieved_secret.value
     #Variable.set(retrieved_secret.value, secret_value_op)
-    #return retrieved_secret.value
-    return kwargs['dag_run'].conf['secret_value_op']
+    return retrieved_secret.value
 
 # Generate 4 tasks
 tasks = ["task{}".format(i) for i in range(50, 52)]
