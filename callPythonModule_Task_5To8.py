@@ -43,10 +43,12 @@ tasks = ["task{}".format(i) for i in range(50, 55)]
 example_dag_complete_node = DummyOperator(task_id="example_dag_complete", dag=dag)
 python_pull_secret = PythonOperator(task_id="python_pull_secret", python_callable=pull_secret_value)
 
+
 org_dags = []
 for python_task in tasks:
 
     bash_command = 'echo HELLO'
+    task_instance = context['task_instance']
     secret_value_op =task_instance.xcom_pull(task_ids='python_pull_secret')
     org_node = KubernetesPodOperator(
         namespace='kube-public',
