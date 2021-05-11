@@ -64,7 +64,6 @@ for python_task in tasks:
         labels={"foo": "bar"},
         image_pull_policy="Always",
         name=python_task,
-        do_xcom_pull=True,
         task_id=python_task,
         is_delete_operator_pod=True,
         get_logs=True,
