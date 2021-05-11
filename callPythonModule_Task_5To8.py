@@ -37,14 +37,15 @@ def pull_secret_value():
     retrieved_secret = client.get_secret(secretName)
     print(f"Your secret is '{retrieved_secret.value}'.")
     secret_value_op = retrieved_secret.value
-    xcom_push(key='secretname3', value = retrieved_secret.value)
+    #xcom_push(key='secretname3', value = retrieved_secret.value)
+    Variable.set(retrieved_secret.value, secret_value_op)
     return retrieved_secret.value
     #return secret_value_op
 
 # Generate 4 tasks
 tasks = ["task{}".format(i) for i in range(50, 55)]
 example_dag_complete_node = DummyOperator(task_id="example_dag_complete", dag=dag)
-python_pull_secret = PythonOperator(task_id="python_pull_secret", python_callable=pull_secret_value, provide_context=True)
+python_pull_secret = PythonOperator(task_id="python_pull_secret", python_callable=pull_secret_value)
 
 
 org_dags = []
@@ -59,15 +60,14 @@ for python_task in tasks:
         image="testcontainerkubernetraja.azurecr.io/argspython",
         image_pull_secrets='testcontainerkubernetraja',
         cmds=["python","name.py"],
-        arguments=[{xcom_pull(key="secretname3")},"Raja","Sekhar"],
+        arguments=[{secret_value_op},"Raja","Sekhar"],
         labels={"foo": "bar"},
         image_pull_policy="Always",
         name=python_task,
         task_id=python_task,
         is_delete_operator_pod=True,
         get_logs=True,
-        dag=dag,
-        xcom_pull=True
+        dag=dag
     )
     
     org_node.set_upstream(python_pull_secret)
