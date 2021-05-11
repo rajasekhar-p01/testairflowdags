@@ -8,6 +8,7 @@ from airflow.operators.python import PythonOperator, PythonVirtualenvOperator
 from azure.keyvault.secrets import SecretClient
 from azure.identity import ClientSecretCredential
 
+secret_value_op = ''
 default_args = {
     'owner': 'Airflow',
     'depends_on_past': False,
@@ -34,6 +35,7 @@ def pull_secret_value():
     secretName="secretname3"
     retrieved_secret = client.get_secret(secretName)
     print(f"Your secret is '{retrieved_secret.value}'.")
+    secret_value_op = retrieved_secret.value
     return retrieved_secret.value
 
 # Generate 4 tasks
@@ -51,7 +53,7 @@ for python_task in tasks:
         image="testcontainerkubernetraja.azurecr.io/argspython",
         image_pull_secrets='testcontainerkubernetraja',
         cmds=["python","name.py"],
-        arguments=[retrieved_secret.value,"Second","Third"],
+        arguments=[secret_value_op,"Second","Third"],
         labels={"foo": "bar"},
         image_pull_policy="Always",
         name=python_task,
