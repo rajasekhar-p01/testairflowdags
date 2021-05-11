@@ -29,7 +29,7 @@ dag = DAG(
     start_date=days_ago(0)
 )
 
-def pull_secret_value():
+def pull_secret_value(ds, **kwargs):
     KVUri = f"https://airflow-keyvault-3.vault.azure.net"
     credential = ClientSecretCredential('d3c91205-02f7-4bba-bd33-0fde50b3a8b4', '0a34166b-75ea-45c5-89a1-b2f62b9ca602', 'e~scpuZ5R-65ueaItpAReX0T-6~kV-j~HU')
     client = SecretClient(vault_url=KVUri, credential=credential)
@@ -39,15 +39,15 @@ def pull_secret_value():
     secret_value_op = retrieved_secret.value
     #Variable.set(retrieved_secret.value, secret_value_op)
     #return retrieved_secret.value
-    return { 'subject': 'secret'}
+    return kwargs['dag_run'].conf['fileName']
 
 # Generate 4 tasks
 tasks = ["task{}".format(i) for i in range(50, 55)]
 example_dag_complete_node = DummyOperator(task_id="example_dag_complete", dag=dag)
-python_pull_secret = PythonOperator(task_id="python_pull_secret", python_callable=pull_secret_value)
+python_pull_secret = PythonOperator(task_id="python_pull_secret", provide_context=True, python_callable=pull_secret_value)
 
-secret_info = python_pull_secret.output
-abc=secret_info['subject']
+source_objects=["{{ task_instance.xcom_pull(task_ids='get_file_name') }}"]
+print("source", source_objects)
 org_dags = []
 for python_task in tasks:
     
@@ -60,7 +60,7 @@ for python_task in tasks:
         image="testcontainerkubernetraja.azurecr.io/argspython",
         image_pull_secrets='testcontainerkubernetraja',
         cmds=["python","name.py"],
-        arguments=[abc,"Raja","Sekhar"],
+        arguments=["RRR","Raja","Sekhar"],
         labels={"foo": "bar"},
         image_pull_policy="Always",
         name=python_task,
