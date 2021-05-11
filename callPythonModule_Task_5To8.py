@@ -39,10 +39,10 @@ def pull_secret_value(ds, **kwargs):
     secret_value_op = retrieved_secret.value
     #Variable.set(retrieved_secret.value, secret_value_op)
     #return retrieved_secret.value
-    return kwargs['dag_run'].conf['fileName']
+    return kwargs['dag_run'].conf['secret_value_op']
 
 # Generate 4 tasks
-tasks = ["task{}".format(i) for i in range(50, 55)]
+tasks = ["task{}".format(i) for i in range(50, 52)]
 example_dag_complete_node = DummyOperator(task_id="example_dag_complete", dag=dag)
 python_pull_secret = PythonOperator(task_id="python_pull_secret", provide_context=True, python_callable=pull_secret_value)
 
