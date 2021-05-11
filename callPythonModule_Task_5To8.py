@@ -7,6 +7,7 @@ from airflow.utils.dates import days_ago
 from airflow.operators.python import PythonOperator, PythonVirtualenvOperator
 from azure.keyvault.secrets import SecretClient
 from azure.identity import ClientSecretCredential
+from airflow.models import Variable
 
 secret_value_op = ''
 default_args = {
@@ -43,7 +44,7 @@ def pull_secret_value():
 # Generate 4 tasks
 tasks = ["task{}".format(i) for i in range(50, 55)]
 example_dag_complete_node = DummyOperator(task_id="example_dag_complete", dag=dag)
-python_pull_secret = PythonOperator(task_id="python_pull_secret", python_callable=pull_secret_value, provide_context=True)
+python_pull_secret = PythonOperator(task_id="python_pull_secret", python_callable=pull_secret_value, xcom_push=True)
 
 
 org_dags = []
@@ -65,7 +66,8 @@ for python_task in tasks:
         task_id=python_task,
         is_delete_operator_pod=True,
         get_logs=True,
-        dag=dag
+        dag=dag,
+        xcom_pull=True
     )
     
     org_node.set_upstream(python_pull_secret)
