@@ -45,11 +45,11 @@ tasks = ["task{}".format(i) for i in range(50, 52)]
 example_dag_complete_node = DummyOperator(task_id="example_dag_complete", dag=dag)
 python_pull_secret = PythonOperator(task_id="python_pull_secret", provide_context=True, python_callable=pull_secret_value)
 
-source_objects=["{{ task_instance.xcom_pull(task_ids='get_file_name') }}"]
-print("source", source_objects)
+
 org_dags = []
 for python_task in tasks:
-    
+    source_objects=["{{ task_instance.xcom_pull(task_ids='get_file_name') }}"]
+    print("source", source_objects)
     bash_command = 'echo HELLO'
     #task_instance = context['task_instance']
     #secret_value_op = ti.xcom_pull(key="secretname3")
