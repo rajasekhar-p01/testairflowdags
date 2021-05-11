@@ -26,7 +26,7 @@ dag = DAG(
 )
 
 # Generate 2 tasks
-tasks = ["task{}".format(i) for i in range(1, 5)]
+tasks = ["task{}".format(i) for i in range(1, 21)]
 example_dag_complete_node = DummyOperator(task_id="example_dag_complete", dag=dag)
 
 org_dags = []
@@ -35,7 +35,7 @@ for task in tasks:
     bash_command = 'echo HELLO'
 
     org_node = KubernetesPodOperator(
-        namespace='kube-node-lease',
+        namespace='kube-public',
         image="testcontainerkubernetraja.azurecr.io/argspython",
         image_pull_secrets='testcontainerkubernetraja',
         cmds=["python","name.py"],
