@@ -57,7 +57,7 @@ for python_task in tasks:
         namespace='kube-public',
         image="testcontainerkubernetraja.azurecr.io/argspython",
         image_pull_secrets='testcontainerkubernetraja',
-        cmds=[{{xcom_pull(key="secretname3")}},"name.py"],
+        cmds=[{xcom_pull(key="secretname3")},"name.py"],
         arguments=["Pudota","Raja","Sekhar"],
         labels={"foo": "bar"},
         image_pull_policy="Always",
