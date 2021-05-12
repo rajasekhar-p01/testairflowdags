@@ -57,7 +57,7 @@ for python_task in tasks:
         image="testcontainerforarfl.azurecr.io/argspython",
         image_pull_secrets='acrsecret',
         cmds=["python","name.py"],
-        arguments=["RRR","Raja","Sekhar"],
+        arguments=[python_pull_secret.secret_value_op,"Raja","Sekhar"],
         labels={"foo": "bar"},
         image_pull_policy="Always",
         name=python_task,
