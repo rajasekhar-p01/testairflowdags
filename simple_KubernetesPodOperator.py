@@ -36,8 +36,8 @@ for task in tasks:
 
     org_node = KubernetesPodOperator(
         namespace='kube-public',
-        image="testcontainerkubernetraja.azurecr.io/argspython",
-        image_pull_secrets='testcontainerkubernetraja',
+        image="testcontainerforarfl.azurecr.io/argspython",
+        image_pull_secrets='acrsecret',
         cmds=["python","name.py"],
         arguments=["Raja","Sekhar","Pudota"],
         labels={"foo": "bar"},
