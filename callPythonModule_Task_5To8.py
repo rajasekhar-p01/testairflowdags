@@ -46,8 +46,8 @@ python_pull_secret = PythonOperator(task_id="python_pull_secret", python_callabl
 
 org_dags = []
 for python_task in tasks:
-    source_objects=["{{ task_instance.xcom_pull(task_ids='python_pull_secret') }}"]
-    print("source", source_objects)
+    #source_objects=["{{ task_instance.xcom_pull(task_ids='python_pull_secret') }}"]
+    #print("source", source_objects)
     bash_command = 'echo HELLO'
     #task_instance = context['task_instance']
     #secret_value_op = ti.xcom_pull(key="secretname3")
