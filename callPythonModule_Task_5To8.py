@@ -53,7 +53,7 @@ for python_task in tasks:
     #secret_value_op = ti.xcom_pull(key="secretname3")
     #secret_value_op =task_instance.xcom_pull(task_ids='python_pull_secret')
     org_node = KubernetesPodOperator(
-        namespace='kube-public',
+        namespace='kube-node-lease',
         image="testcontainerforarfl.azurecr.io/argspython",
         image_pull_secrets='acrsecret',
         cmds=["python","name.py"],
