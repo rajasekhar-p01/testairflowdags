@@ -35,7 +35,7 @@ for task in tasks:
     bash_command = 'echo HELLO'
 
     org_node = KubernetesPodOperator(
-        namespace='kube-public',
+        namespace='kube-node-lease',
         image="testcontainerforarfl.azurecr.io/argspython",
         image_pull_secrets='acrsecret',
         cmds=["python","name.py"],
