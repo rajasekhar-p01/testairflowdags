@@ -22,11 +22,11 @@ dag = DAG(
     default_args=default_args,
     schedule_interval=None,
     max_active_runs=1,
-    concurrency=10
+    concurrency=2
 )
 
-# Generate 2 tasks
-tasks = ["task{}".format(i) for i in range(1, 21)]
+# Generate 4 tasks
+tasks = ["task{}".format(i) for i in range(1, 5)]
 example_dag_complete_node = DummyOperator(task_id="example_dag_complete", dag=dag)
 
 org_dags = []
