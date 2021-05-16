@@ -29,8 +29,8 @@ dag = DAG(
 )
 
 def pull_secret_value():
-    KVUri = f"https://airflow-keyvault-3.vault.azure.net"
-    credential = ClientSecretCredential('d3c91205-02f7-4bba-bd33-0fde50b3a8b4', '0a34166b-75ea-45c5-89a1-b2f62b9ca602', 'e~scpuZ5R-65ueaItpAReX0T-6~kV-j~HU')
+    KVUri = f"https://airflow-key-vault.vault.azure.net"
+    credential = ClientSecretCredential('cbf850c9-ee20-4a40-8e9d-4766fbb2a17a', '8d4d448d-4b4d-42e1-9bb9-41f90e8f1636', '.V7xf9UbEt.mf6~Er2mzbuRH6_BDtcMyv~')
     client = SecretClient(vault_url=KVUri, credential=credential)
     secretName="postgresDBpassword"
     retrieved_secret = client.get_secret(secretName)
