@@ -54,7 +54,7 @@ for python_task in tasks:
     #secret_value_op =task_instance.xcom_pull(task_ids='python_pull_secret')
     org_node = KubernetesPodOperator(
         namespace='kube-node-lease',
-        image="testcontainerforarfl.azurecr.io/argspython",
+        image="airflowacrdemocontainer.azurecr.io/argspython",
         image_pull_secrets='acrsecret',
         cmds=["python","name.py"],
         arguments=[python_pull_secret.output,"Raja","Sekhar"],
