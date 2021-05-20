@@ -20,7 +20,7 @@ default_args = {
     'email_on_failure': False,
     'email_on_retry': False,
     'retries': 1,
-    'retry_delay': timedelta(minutes=10),
+    'retry_delay': timedelta(minutes=8),
 }
 
 dag = DAG(
@@ -42,7 +42,7 @@ def pull_secret_value():
     return retrieved_secret.value
 
 # Generate 4 tasks
-tasks = ["task{}".format(i) for i in range(5, 9)]
+tasks = ["task{}".format(i) for i in range(10, 20)]
 example_dag_complete_node = DummyOperator(task_id="example_dag_complete", dag=dag)
 python_pull_secret = PythonOperator(task_id="python_pull_secret", python_callable=pull_secret_value)
 
