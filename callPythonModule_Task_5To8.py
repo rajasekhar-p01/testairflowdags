@@ -39,9 +39,6 @@ def pull_secret_value():
     print(f"Your secret is '{retrieved_secret.value}'.")
     secret_value_op = retrieved_secret.value
     l=[]
-    for i in range(0,1024*1024):
-        time.sleep(1)
-        l.append("*" * 1024)
     return retrieved_secret.value
 
 # Generate 4 tasks
