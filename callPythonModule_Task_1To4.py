@@ -18,7 +18,7 @@ default_args = {
     'retries': 0,
     'retry_delay': timedelta(minutes=5),
 }
-resource1={"request_memory":"40Mi","request_cpu":"10m","limit_memory":"40Mi","limit_cpu":"10m"}
+resource1={"request_memory":"1Mi","request_cpu":"1m","limit_memory":"1Mi","limit_cpu":"1m"}
 
 dag = DAG(
     'callPythonModule_Task_1To4',
