@@ -37,9 +37,9 @@ for python_task in tasks:
 
     org_node = KubernetesPodOperator(
         namespace='kube-node-lease',
-        image="airflowacrdemocontainer.azurecr.io/argspython",
+        image="airflowacrdemocontainer.azurecr.io/memory",
         image_pull_secrets='acrsecret',
-        cmds=["python","name.py"],
+        cmds=["python","memory.py"],
         arguments=["Pudota","Raja","Sekhar"],
         labels={"foo": "bar"},
         image_pull_policy="Always",
