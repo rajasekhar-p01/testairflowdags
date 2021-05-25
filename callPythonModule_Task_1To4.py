@@ -15,7 +15,7 @@ default_args = {
     'email': ['airflow@example.com'],
     'email_on_failure': False,
     'email_on_retry': False,
-    'retries': 1,
+    'retries': 0,
     'retry_delay': timedelta(minutes=8),
 }
 #resource1={"request_memory":"1Mi","request_cpu":"1m","limit_memory":"1Mi","limit_cpu":"1m"}
