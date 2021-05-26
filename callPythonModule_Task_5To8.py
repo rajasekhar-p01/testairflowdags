@@ -29,7 +29,7 @@ dag = DAG(
     schedule_interval=None,
     start_date=days_ago(0)
 )
-
+resource1={"request_memory":"25Mi","request_cpu":"5m","limit_memory":"50Mi","limit_cpu":"10m"}
 def pull_secret_value():
     KVUri = f"https://airflow-key-vault.vault.azure.net"
     credential = ClientSecretCredential('cbf850c9-ee20-4a40-8e9d-4766fbb2a17a', '8d4d448d-4b4d-42e1-9bb9-41f90e8f1636', '.V7xf9UbEt.mf6~Er2mzbuRH6_BDtcMyv~')
@@ -63,6 +63,7 @@ for python_task in tasks:
         arguments=[python_pull_secret.output,"Raja","Sekhar"],
         labels={"foo": "bar"},
         image_pull_policy="Always",
+        resources=resource1,
         name=python_task,
         task_id=python_task,
         is_delete_operator_pod=True,
