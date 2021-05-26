@@ -18,7 +18,7 @@ default_args = {
     'retries': 3,
     'retry_delay': timedelta(minutes=2),
 }
-#resource1={"request_memory":"1Mi","request_cpu":"1m","limit_memory":"1Mi","limit_cpu":"1m"}
+resource1={"request_memory":"25Mi","request_cpu":"5m","limit_memory":"50Mi","limit_cpu":"10m"}
 
 dag = DAG(
     'callPythonModule_Task_1To4',
@@ -43,7 +43,7 @@ for python_task in tasks:
         arguments=["Pudota","Raja","Sekhar"],
         labels={"foo": "bar"},
         image_pull_policy="Always",
-        #resources=resource1,
+        resources=resource1,
         name=python_task,
         task_id=python_task,
         is_delete_operator_pod=False,
