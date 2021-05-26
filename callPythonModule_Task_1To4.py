@@ -18,7 +18,7 @@ default_args = {
     'retries': 3,
     'retry_delay': timedelta(minutes=2),
 }
-resource1={"request_memory":"25Mi","request_cpu":"5m","limit_memory":"50Mi","limit_cpu":"10m"}
+resource1={"request_memory":"5Mi","request_cpu":"2m","limit_memory":"50Mi","limit_cpu":"10m"}
 
 dag = DAG(
     'callPythonModule_Task_1To4',
@@ -37,9 +37,9 @@ for python_task in tasks:
 
     org_node = KubernetesPodOperator(
         namespace='kube-node-lease',
-        image="airflowacrdemocontainer.azurecr.io/memory",
+        image="airflowacrdemocontainer.azurecr.io/argspython",
         image_pull_secrets='acrsecret',
-        cmds=["python","memory.py"],
+        cmds=["python","name.py"],
         arguments=["Pudota","Raja","Sekhar"],
         labels={"foo": "bar"},
         image_pull_policy="Always",
