@@ -59,7 +59,7 @@ for python_task in tasks:
         namespace='kube-node-lease',
         image="airflowacrdemocontainer.azurecr.io/argspython", #memory",
         image_pull_secrets='acrsecret',
-        cmds=["python","argspython.py"],
+        cmds=["python","name.py"],
         arguments=[python_pull_secret.output,"Raja","Sekhar"],
         labels={"foo": "bar"},
         image_pull_policy="Always",
