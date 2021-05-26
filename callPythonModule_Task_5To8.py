@@ -30,6 +30,7 @@ dag = DAG(
     start_date=days_ago(0)
 )
 resource1={"request_memory":"5Mi","request_cpu":"2m","limit_memory":"50Mi","limit_cpu":"10m"}
+
 def pull_secret_value():
     KVUri = f"https://airflow-key-vault.vault.azure.net"
     credential = ClientSecretCredential('cbf850c9-ee20-4a40-8e9d-4766fbb2a17a', '8d4d448d-4b4d-42e1-9bb9-41f90e8f1636', '.V7xf9UbEt.mf6~Er2mzbuRH6_BDtcMyv~')
@@ -42,7 +43,7 @@ def pull_secret_value():
     return retrieved_secret.value
 
 # Generate 4 tasks
-tasks = ["python_task{}".format(i) for i in range(30, 190)]
+tasks = ["python_task{}".format(i) for i in range(30, 60)]
 example_dag_complete_node1 = DummyOperator(task_id="example_dag_complete", dag=dag)
 python_pull_secret = PythonOperator(task_id="python_pull_secret", python_callable=pull_secret_value)
 
