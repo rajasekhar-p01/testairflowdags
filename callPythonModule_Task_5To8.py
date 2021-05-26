@@ -61,6 +61,7 @@ for python_task in tasks:
         image="airflowacrdemocontainer.azurecr.io/argspython", #memory",
         image_pull_secrets='acrsecret',
         cmds=["python","name.py"],
+        pool='pool2',
         arguments=[python_pull_secret.output,"Raja","Sekhar"],
         labels={"foo": "bar"},
         image_pull_policy="Always",
