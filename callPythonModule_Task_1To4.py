@@ -1,4 +1,5 @@
 from datetime import timedelta
+from kubernetes.client import models as k8s
 
 from airflow import DAG
 from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOperator
