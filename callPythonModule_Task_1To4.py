@@ -41,6 +41,11 @@ for python_task in tasks:
         image_pull_secrets='acrsecret',
         cmds=["python","name.py"],
         arguments=["Pudota","Raja","Sekhar"],
+        tolerations=[k8s.V1Toleration(
+            key='key1',
+            operator='Equal',
+            value='value1',
+            effect='NoSchedule')],
         labels={"foo": "bar"},
         image_pull_policy="Always",
         resources=resource1,
