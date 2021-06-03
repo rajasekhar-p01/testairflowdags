@@ -28,7 +28,7 @@ dag = DAG(
 )
 
 # Generate 4 tasks
-tasks = ["taks{}".format(i) for i in range(1, 5)]
+tasks = ["py_task{}".format(i) for i in range(1, 5)]
 example_dag_complete_node = DummyOperator(task_id="example_dag_complete", dag=dag)
 
 org_dags = []
