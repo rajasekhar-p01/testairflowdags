@@ -43,12 +43,33 @@ def pull_secret_value():
     return retrieved_secret.value
 
 # Generate 4 tasks
-tasks = ["python_taks{}".format(i) for i in range(60, 120)]
+#tasks = ["python_taks{}".format(i) for i in range(60, 120)]
 example_dag_complete_node1 = DummyOperator(task_id="example_dag_complete", dag=dag)
-#python_pull_secret = PythonOperator(task_id="python_pull_secret", python_callable=pull_secret_value)
+python_pull_secret = PythonOperator(task_id="python_pull_secret", python_callable=pull_secret_value)
+
+org_node = KubernetesPodOperator(
+        namespace='kube-node-lease',
+        image="airflowacrcontainer.azurecr.io/argspython", #memory",
+        image_pull_secrets='acrsecret',
+        cmds=["python","name.py"],
+        #pool='pool2',
+        arguments=["Pudota","Raja","Sekhar"],
+        labels={"foo": "bar"},
+        image_pull_policy="Always",
+        resources=resource1,
+        name="python_task",
+        task_id=python_pull_secret.output,
+        is_delete_operator_pod=True,
+        get_logs=True,
+        dag=dag
+    )
+
+org_node.set_upstream(python_pull_secret)
+org_node.set_downstream(example_dag_complete_node1)
 
 
-org_dags = []
+
+"""org_dags = []
 for python_task in tasks:
     #source_objects=["{{ task_instance.xcom_pull(task_ids='python_pull_secret') }}"]
     #print("source", source_objects)
@@ -74,4 +95,4 @@ for python_task in tasks:
     )
     
     #org_node.set_upstream(python_pull_secret)
-    org_node.set_downstream(example_dag_complete_node1)
+    org_node.set_downstream(example_dag_complete_node1)"""
