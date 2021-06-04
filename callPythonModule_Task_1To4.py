@@ -8,6 +8,7 @@ from airflow.utils.dates import days_ago
 from azure.keyvault.secrets import SecretClient
 from azure.identity import ClientSecretCredential
 
+
 default_args = {
     'owner': 'Airflow',
     'depends_on_past': False,
@@ -43,7 +44,7 @@ org_node = KubernetesPodOperator(
         image_pull_policy="Always",
         resources=resource1,
         name="python_task_name",
-        task_id='{{ dag_run.conf.blob_prefix }}',
+        task_id='{{ (dag_run.conf.uuid) }}',
         is_delete_operator_pod=False,
         get_logs=True,
         dag=dag
