@@ -19,11 +19,11 @@ default_args = {
 }
 resource1={"request_memory":"5Mi","request_cpu":"2m","limit_memory":"50Mi","limit_cpu":"10m"}
 #uuid2 = dag_run.conf["uuid"]
-temp_uuid= f'{ dag_run.conf["uuid"] }'
-uuid = "raja-" + str(temp_uuid)
+#temp_uuid= f'{ dag_run.conf["uuid"] }'
+#uuid = "raja +" + str(temp_uuid)
 def execute(self, context):
     message = context['dag_run'].conf.get('uuid')
-    uuid = [f"print('{message}')"]
+    uuid = "Raja--" + str(f'{message}')
     #self.arguments.extend(params)
     #super().execute(context)
     return uuid
@@ -57,7 +57,7 @@ org_node = KubernetesPodOperator(
         image_pull_policy="Always",
         resources=resource1,
         name="python_task_name",
-        task_id= uuid, #str ({{ dag_run.conf.uuid }}), # }}', #Variable.get("uuid"),#context['dag_run'].conf.get('uuid'),
+        task_id= execute(), #uuid, #str ({{ dag_run.conf.uuid }}), # }}', #Variable.get("uuid"),#context['dag_run'].conf.get('uuid'),
         is_delete_operator_pod=False,
         get_logs=True,
         dag=dag
