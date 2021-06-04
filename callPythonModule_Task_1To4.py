@@ -47,7 +47,7 @@ org_node = KubernetesPodOperator(
             effect='NoSchedule')],
         labels={"foo": "bar"},
         env_vars={
-            'uuid': 'uuid'
+            'uuid': uuid
         },
         image_pull_policy="Always",
         resources=resource1,
