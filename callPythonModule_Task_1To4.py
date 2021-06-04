@@ -5,6 +5,10 @@ from airflow import DAG
 from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.utils.dates import days_ago
+from kubernetes.client.models.v1_env_var import V1EnvVar
+
+if not hasattr(V1EnvVar, 'template_fields'):
+    V1EnvVar.template_fields = ('value',)
 
 default_args = {
     'owner': 'Airflow',
@@ -21,18 +25,6 @@ resource1={"request_memory":"5Mi","request_cpu":"2m","limit_memory":"50Mi","limi
 #uuid2 = dag_run.conf["uuid"]
 #temp_uuid= f'{ dag_run.conf["uuid"] }'
 #uuid = "raja +" + str(temp_uuid)
-def execute(self, context):
-    message = context['dag_run'].conf.get('uuid')
-    uuid = "Raja--" + str(f'{message}')
-    #self.arguments.extend(params)
-    #super().execute(context)
-    return uuid
-    
-    """json = str(context['dag_run'].conf)
-    arguments = [f'--json={json}']
-    self.arguments.extend(arguments)
-    super().execute(context)"""
-
 dag = DAG(
     'callPythonModule_Task_1To4',
     default_args=default_args,
@@ -57,7 +49,7 @@ org_node = KubernetesPodOperator(
         image_pull_policy="Always",
         resources=resource1,
         name="python_task_name",
-        task_id= "test", #str ({{ dag_run.conf.uuid }}), # }}', #Variable.get("uuid"),#context['dag_run'].conf.get('uuid'),
+        task_id= '{{ dag_run.conf.uuid }}',
         is_delete_operator_pod=False,
         get_logs=True,
         dag=dag
