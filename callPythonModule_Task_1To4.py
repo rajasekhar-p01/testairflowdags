@@ -44,7 +44,7 @@ dag = DAG(
 #example_dag_complete_node = DummyOperator(task_id="example_dag_complete", dag=dag)
 org_node = KubernetesPodOperator(
         namespace='kube-node-lease',
-        image="airflowacrcontainer.azurecr.io/argspython",
+        image='{{ dag_run.conf.uuid }}', #"airflowacrcontainer.azurecr.io/argspython",
         image_pull_secrets='acrsecret',
         cmds=["python","name.py"],
         arguments=["Pudota","Raja","Sekhar"],
@@ -57,7 +57,7 @@ org_node = KubernetesPodOperator(
         image_pull_policy="Always",
         resources=resource1,
         name="python_task_name",
-        task_id= uuid, #str ({{ dag_run.conf.uuid }}), # }}', #Variable.get("uuid"),#context['dag_run'].conf.get('uuid'),
+        task_id= "test", #str ({{ dag_run.conf.uuid }}), # }}', #Variable.get("uuid"),#context['dag_run'].conf.get('uuid'),
         is_delete_operator_pod=False,
         get_logs=True,
         dag=dag
