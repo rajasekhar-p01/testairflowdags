@@ -6,11 +6,6 @@ from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOpera
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.utils.dates import days_ago
 
-from kubernetes.client.models.v1_env_var import V1EnvVar
-
-if not hasattr(V1EnvVar, 'template_fields'):
-    V1EnvVar.template_fields = ('value',)
-
 default_args = {
     'owner': 'Airflow',
     'depends_on_past': False,
@@ -25,11 +20,14 @@ default_args = {
 resource1={"request_memory":"5Mi","request_cpu":"2m","limit_memory":"50Mi","limit_cpu":"10m"}
 #uuid2 = dag_run.conf["uuid"]
 #uuid= dag_run.conf.uuid
+def uuid_value(**context):
+    return context['dag_run'].conf['uuid']
+
 dag = DAG(
     'callPythonModule_Task_1To4',
     default_args=default_args,
     schedule_interval=None,
-    
+    user_defined_macros={'uuid_fun': uuid_value}
 )
 """env_vars={
             'UUID': '{{ dag_run.conf["uuid"] }}'
@@ -50,7 +48,7 @@ org_node = KubernetesPodOperator(
         image_pull_policy="Always",
         resources=resource1,
         name="python_task_name",
-        task_id= dag_run.conf.uuid, # }}', #Variable.get("uuid"),#context['dag_run'].conf.get('uuid'),
+        task_id= uuid_value.output, # }}', #Variable.get("uuid"),#context['dag_run'].conf.get('uuid'),
         is_delete_operator_pod=False,
         get_logs=True,
         dag=dag
