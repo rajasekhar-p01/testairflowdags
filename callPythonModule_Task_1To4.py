@@ -19,15 +19,13 @@ default_args = {
 }
 resource1={"request_memory":"5Mi","request_cpu":"2m","limit_memory":"50Mi","limit_cpu":"10m"}
 #uuid2 = dag_run.conf["uuid"]
-#uuid= dag_run.conf.uuid
-def uuid_value(**context):
-    return context['dag_run'].conf['uuid']
+temp_uuid= {{ dag_run.conf.uuid }}
+uuid = str(temp_uuid)
 
 dag = DAG(
     'callPythonModule_Task_1To4',
     default_args=default_args,
-    schedule_interval=None,
-    user_defined_macros={'uuid_fun': uuid_value}
+    schedule_interval=None
 )
 """env_vars={
             'UUID': '{{ dag_run.conf["uuid"] }}'
@@ -48,7 +46,7 @@ org_node = KubernetesPodOperator(
         image_pull_policy="Always",
         resources=resource1,
         name="python_task_name",
-        task_id= str ({{ dag_run.conf.uuid }}), # }}', #Variable.get("uuid"),#context['dag_run'].conf.get('uuid'),
+        task_id= uuid, #str ({{ dag_run.conf.uuid }}), # }}', #Variable.get("uuid"),#context['dag_run'].conf.get('uuid'),
         is_delete_operator_pod=False,
         get_logs=True,
         dag=dag
