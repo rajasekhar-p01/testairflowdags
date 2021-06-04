@@ -26,6 +26,16 @@ dag = DAG(
     schedule_interval=None
 )
 
+def execute(self, context):
+    """json = str(context['dag_run'].conf)
+    arguments = [f'--json={json}']
+    self.arguments.extend(arguments)
+    super().execute(context)"""
+    message = context['dag_run'].conf.get('uuid')
+    params = [f"print('{message}')"]
+    self.arguments.extend(params)
+    super().execute(context)
+    
 example_dag_complete_node = DummyOperator(task_id="example_dag_complete", dag=dag)
 org_node = KubernetesPodOperator(
         namespace='kube-node-lease',
@@ -42,7 +52,7 @@ org_node = KubernetesPodOperator(
         image_pull_policy="Always",
         resources=resource1,
         name="python_task_name",
-        task_id=conf.get("uuid"),
+        task_id=message,
         is_delete_operator_pod=False,
         get_logs=True,
         dag=dag
