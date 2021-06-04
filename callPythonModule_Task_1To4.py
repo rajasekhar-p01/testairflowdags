@@ -5,8 +5,11 @@ from airflow import DAG
 from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.utils.dates import days_ago
-from airflow import configuration as conf
-from airflow.models import Variable
+
+#from kubernetes.client.models.v1_env_var import V1EnvVar
+
+#if not hasattr(V1EnvVar, 'template_fields'):
+#    V1EnvVar.template_fields = ('value',)
 
 default_args = {
     'owner': 'Airflow',
@@ -24,7 +27,8 @@ resource1={"request_memory":"5Mi","request_cpu":"2m","limit_memory":"50Mi","limi
 dag = DAG(
     'callPythonModule_Task_1To4',
     default_args=default_args,
-    schedule_interval=None
+    schedule_interval=None,
+    
 )
     
 example_dag_complete_node = DummyOperator(task_id="example_dag_complete", dag=dag)
@@ -46,7 +50,7 @@ org_node = KubernetesPodOperator(
         image_pull_policy="Always",
         resources=resource1,
         name="python_task_name",
-        task_id='{{ conf["uuid"] }}', #Variable.get("uuid"),#context['dag_run'].conf.get('uuid'),
+        task_id='{{ dag_run.conf.uuid }}', #Variable.get("uuid"),#context['dag_run'].conf.get('uuid'),
         is_delete_operator_pod=False,
         get_logs=True,
         dag=dag
