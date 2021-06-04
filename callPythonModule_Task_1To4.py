@@ -19,17 +19,20 @@ default_args = {
 }
 resource1={"request_memory":"5Mi","request_cpu":"2m","limit_memory":"50Mi","limit_cpu":"10m"}
 #uuid2 = dag_run.conf["uuid"]
-temp_uuid= '{{ dag_run.conf.uuid }}'
-uuid = str(temp_uuid)
+#temp_uuid= '{{ dag_run.conf.uuid }}'
+#uuid = str(temp_uuid)
+def execute(self, context):
+    json = str(context['dag_run'].conf)
+    arguments = [f'--json={json}']
+    self.arguments.extend(arguments)
+    super().execute(context)
 
 dag = DAG(
     'callPythonModule_Task_1To4',
     default_args=default_args,
     schedule_interval=None
 )
-"""env_vars={
-            'UUID': '{{ dag_run.conf["uuid"] }}'
-        },"""
+
 #example_dag_complete_node = DummyOperator(task_id="example_dag_complete", dag=dag)
 org_node = KubernetesPodOperator(
         namespace='kube-node-lease',
@@ -43,6 +46,9 @@ org_node = KubernetesPodOperator(
             value='value1',
             effect='NoSchedule')],
         labels={"foo": "bar"},
+        env_vars={
+            'uuid': 'uuid'
+        },
         image_pull_policy="Always",
         resources=resource1,
         name="python_task_name",
