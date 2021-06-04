@@ -5,12 +5,7 @@ from airflow import DAG
 from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.utils.dates import days_ago
-#from azure.keyvault.secrets import SecretClient
-#from azure.identity import ClientSecretCredential
-from kubernetes.client.models.v1_env_var import V1EnvVar
-
-if not hasattr(V1EnvVar, 'template_fields'):
-    V1EnvVar.template_fields = ('value',)
+from airflow import configuration as conf
 
 default_args = {
     'owner': 'Airflow',
@@ -24,7 +19,7 @@ default_args = {
     'retry_delay': timedelta(minutes=2),
 }
 resource1={"request_memory":"5Mi","request_cpu":"2m","limit_memory":"50Mi","limit_cpu":"10m"}
-
+uuid=conf.get('conf')
 dag = DAG(
     'callPythonModule_Task_1To4',
     default_args=default_args,
@@ -47,7 +42,7 @@ org_node = KubernetesPodOperator(
         image_pull_policy="Always",
         resources=resource1,
         name="python_task_name",
-        task_id='{{ (dag_run.conf.uuid) }}',
+        task_id=uuid,
         is_delete_operator_pod=False,
         get_logs=True,
         dag=dag
