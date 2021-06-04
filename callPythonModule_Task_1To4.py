@@ -6,6 +6,7 @@ from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOpera
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.utils.dates import days_ago
 from airflow import configuration as conf
+from airflow.models import Variable
 
 default_args = {
     'owner': 'Airflow',
@@ -26,15 +27,15 @@ dag = DAG(
     schedule_interval=None
 )
 
-def execute(self, context):
-    """json = str(context['dag_run'].conf)
+"""def execute(self, context):
+    json = str(context['dag_run'].conf)
     arguments = [f'--json={json}']
     self.arguments.extend(arguments)
-    super().execute(context)"""
+    super().execute(context)
     message = context['dag_run'].conf.get('uuid')
     params = [f"print('{message}')"]
     self.arguments.extend(params)
-    super().execute(context)
+    super().execute(context)"""
     
 example_dag_complete_node = DummyOperator(task_id="example_dag_complete", dag=dag)
 org_node = KubernetesPodOperator(
@@ -52,7 +53,7 @@ org_node = KubernetesPodOperator(
         image_pull_policy="Always",
         resources=resource1,
         name="python_task_name",
-        task_id=context['dag_run'].conf.get('uuid'),
+        task_id=Variable.get("uuid"),#context['dag_run'].conf.get('uuid'),
         is_delete_operator_pod=False,
         get_logs=True,
         dag=dag
