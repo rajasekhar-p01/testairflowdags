@@ -28,7 +28,7 @@ dag = DAG(
 )
 
 example_dag_complete_node = DummyOperator(task_id="example_dag_complete", dag=dag)
-org_node = KubernetesPodOperator(
+python_task = KubernetesPodOperator(
         namespace='kube-node-lease',
         image="airflowacrcontainer.azurecr.io/argspython",
         image_pull_secrets='acrsecret',
@@ -42,13 +42,13 @@ org_node = KubernetesPodOperator(
         labels={"foo": "bar"},
         image_pull_policy="Always",
         resources=resource1,
-        #name=python_task,
+        name=python_task,
         task_id=python_task,
         is_delete_operator_pod=False,
         get_logs=True,
         dag=dag
     )
-org_node.set_downstream(example_dag_complete_node)
+python_task.set_downstream(example_dag_complete_node)
 
 # Generate 4 tasks
 """tasks = ["py_task{}".format(i) for i in range(1, 5)]
