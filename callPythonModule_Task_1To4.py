@@ -19,7 +19,7 @@ default_args = {
 }
 resource1={"request_memory":"5Mi","request_cpu":"2m","limit_memory":"50Mi","limit_cpu":"10m"}
 #uuid2 = dag_run.conf["uuid"]
-temp_uuid= f'{{ dag_run.conf.uuid }}'
+temp_uuid= f'{ dag_run.conf["uuid"] }'
 uuid = "raja-" + str(temp_uuid)
 def execute(self, context):
     message = context['dag_run'].conf.get('uuid')
