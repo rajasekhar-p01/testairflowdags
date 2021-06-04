@@ -30,7 +30,9 @@ dag = DAG(
     schedule_interval=None,
     
 )
-    
+"""env_vars={
+            'UUID': '{{ dag_run.conf["uuid"] }}'
+        },"""
 #example_dag_complete_node = DummyOperator(task_id="example_dag_complete", dag=dag)
 org_node = KubernetesPodOperator(
         namespace='kube-node-lease',
@@ -38,9 +40,6 @@ org_node = KubernetesPodOperator(
         image_pull_secrets='acrsecret',
         cmds=["python","name.py"],
         arguments=["Pudota","Raja","Sekhar"],
-        """env_vars={
-            'UUID': '{{ dag_run.conf["uuid"] }}'
-        },"""
         tolerations=[k8s.V1Toleration(
             key='key1',
             operator='Equal',
