@@ -39,7 +39,7 @@ def pull_secret_value():
     retrieved_secret = client.get_secret(secretName)
     print(f"Your secret is '{retrieved_secret.value}'.")
     secret_value_op = retrieved_secret.value
-    l=[]
+    #l=[]
     return retrieved_secret.value
 
 # Generate 4 tasks
@@ -58,7 +58,7 @@ org_node = KubernetesPodOperator(
         image_pull_policy="Always",
         resources=resource1,
         name="python_task",
-        task_id=python_pull_secret.output,
+        task_id=str(python_pull_secret.output),
         is_delete_operator_pod=True,
         get_logs=True,
         dag=dag
