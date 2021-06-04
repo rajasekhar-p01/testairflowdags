@@ -24,8 +24,9 @@ resource1={"request_memory":"5Mi","request_cpu":"2m","limit_memory":"50Mi","limi
 def execute(self, context):
     message = context['dag_run'].conf.get('uuid')
     uuid = [f"print('{message}')"]
-    self.arguments.extend(params)
-    super().execute(context)
+    #self.arguments.extend(params)
+    #super().execute(context)
+    return uuid
     
     """json = str(context['dag_run'].conf)
     arguments = [f'--json={json}']
