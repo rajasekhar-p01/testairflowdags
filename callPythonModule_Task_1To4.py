@@ -5,9 +5,12 @@ from airflow import DAG
 from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.utils.dates import days_ago
-from azure.keyvault.secrets import SecretClient
-from azure.identity import ClientSecretCredential
+#from azure.keyvault.secrets import SecretClient
+#from azure.identity import ClientSecretCredential
+from kubernetes.client.models.v1_env_var import V1EnvVar
 
+if not hasattr(V1EnvVar, 'template_fields'):
+    V1EnvVar.template_fields = ('value',)
 
 default_args = {
     'owner': 'Airflow',
