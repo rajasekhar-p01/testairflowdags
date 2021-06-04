@@ -24,7 +24,7 @@ default_args = {
 }
 resource1={"request_memory":"5Mi","request_cpu":"2m","limit_memory":"50Mi","limit_cpu":"10m"}
 uuid2 = '{{ dag_run.conf["uuid"] }}'
-uuid= '{{ dag_run.conf.uuid }}'
+uuid= "raja" #'{{ dag_run.conf.uuid }}'
 dag = DAG(
     'callPythonModule_Task_1To4',
     default_args=default_args,
@@ -50,7 +50,7 @@ org_node = KubernetesPodOperator(
         image_pull_policy="Always",
         resources=resource1,
         name=uuid2,#"python_task_name",
-        #task_id=uuid,#'{{ dag_run.conf.uuid }}', #Variable.get("uuid"),#context['dag_run'].conf.get('uuid'),
+        task_id=uuid,#'{{ dag_run.conf.uuid }}', #Variable.get("uuid"),#context['dag_run'].conf.get('uuid'),
         is_delete_operator_pod=False,
         get_logs=True,
         dag=dag
