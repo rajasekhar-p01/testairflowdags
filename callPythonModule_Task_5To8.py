@@ -22,10 +22,10 @@ default_args = {
     'retries': 3,
     'retry_delay': timedelta(minutes=2),
 }
-dagid = f'{{ dag_run.conf.uuid_val }}'
+#dagid = f'{{ dag_run.conf.uuid_val }}'
 dag = DAG(
-    #'callPythonModule_Task_5To8',
-    dag_id=dagid,
+    'callPythonModule_Task_5To8',
+    #dag_id=dagid,
     default_args=default_args,
     schedule_interval=None,
     start_date=days_ago(0)
@@ -70,8 +70,6 @@ org_node = KubernetesPodOperator(
 
 org_node.set_upstream(python_pull_secret)
 org_node.set_downstream(example_dag_complete_node1)
-
-
 
 """org_dags = []
 for python_task in tasks:
