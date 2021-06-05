@@ -46,13 +46,13 @@ def create_kpo_task(current_uuid):
         image_pull_policy="Always",
         resources=resource1,
         name="python_task_name",
-        task_id='tsk_' + str(current_uuid), #"kb_task", #"checktask",#'{{ dag_run.conf.uuid }}',
+        task_id='tsk_{current_uuid}', #"kb_task", #"checktask",#'{{ dag_run.conf.uuid }}',
         is_delete_operator_pod=False,
         get_logs=True,
         dag=dag
     )
 stop_task = DummyOperator(task_id="stop", dag=dag)
-uuid_inp = f'py.format_{ dag_run.conf.uuid }'
+uuid_inp = f'{{ dag_run.conf.uuid }}'
 created_task = create_kpo_task(str(uuid_inp))
 start_task >> created_task >> stop_task
 #org_node.set_upstream(start_task)
