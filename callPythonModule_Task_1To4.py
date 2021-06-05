@@ -10,6 +10,12 @@ from kubernetes.client.models.v1_env_var import V1EnvVar
 if not hasattr(V1EnvVar, 'template_fields'):
     V1EnvVar.template_fields = ('value',)
 
+my_env_vars = [
+    k8s.V1EnvVar(
+        name='UUID_ID',
+        value='{{ dag_run.conf.uuid_val }}'
+    )]
+
 default_args = {
     'owner': 'Airflow',
     'depends_on_past': False,
@@ -48,8 +54,9 @@ org_node = KubernetesPodOperator(
         labels={"foo": "bar"},
         image_pull_policy="Always",
         resources=resource1,
+        env_vars=my_env_vars,
         name="python_task_name",
-        task_id= "checktask",#'{{ dag_run.conf.uuid }}',
+        task_id= UUID_ID, #"checktask",#'{{ dag_run.conf.uuid }}',
         is_delete_operator_pod=False,
         get_logs=True,
         dag=dag
