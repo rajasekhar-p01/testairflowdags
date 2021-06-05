@@ -47,7 +47,7 @@ def pull_secret_value():#(ti,**context):
 # Generate 4 tasks
 #tasks = ["python_taks{}".format(i) for i in range(60, 120)]
 example_dag_complete_node1 = DummyOperator(task_id="example_dag_complete", dag=dag)
-python_pull_secret = PythonOperator(task_id="python_pull_secret", python_callable=pull_secret_value)
+python_pull_secret = PythonOperator(task_id="python_pull_secret", python_callable=pull_secret_value, dag=dag)
 
 org_node = KubernetesPodOperator(
         namespace='kube-node-lease',
