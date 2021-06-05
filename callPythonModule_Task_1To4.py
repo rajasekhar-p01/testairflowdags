@@ -7,14 +7,6 @@ from airflow.operators.dummy_operator import DummyOperator
 from airflow.utils.dates import days_ago
 from kubernetes.client.models.v1_env_var import V1EnvVar
 
-if not hasattr(V1EnvVar, 'template_fields'):
-    V1EnvVar.template_fields = ('value',)
-
-my_env_vars = [
-    k8s.V1EnvVar(
-        name='UUID_ID',
-        value='{{ dag_run.conf.uuid_val }}'
-    )]
 
 default_args = {
     'owner': 'Airflow',
@@ -36,10 +28,8 @@ dag = DAG(
     default_args=default_args,
     schedule_interval=None
 )
-""" env_vars={
-            'uuid': uuid
-        },"""
-#example_dag_complete_node = DummyOperator(task_id="example_dag_complete", dag=dag)
+
+start_task = DummyOperator(task_id="start", dag=dag)
 org_node = KubernetesPodOperator(
         namespace='kube-node-lease',
         image='{{ dag_run.conf.uuid }}', #"airflowacrcontainer.azurecr.io/argspython",
@@ -56,12 +46,14 @@ org_node = KubernetesPodOperator(
         resources=resource1,
         env_vars=[my_env_vars],
         name="python_task_name",
-        task_id= var.value.UUID_ID, #"checktask",#'{{ dag_run.conf.uuid }}',
+        task_id= "kb_task", #"checktask",#'{{ dag_run.conf.uuid }}',
         is_delete_operator_pod=False,
         get_logs=True,
         dag=dag
     )
-#org_node.set_downstream(example_dag_complete_node)
+stop_task = DummyOperator(task_id="stop", dag=dag)
+org_node.set_upstream(start_task)
+org_node.set_downstream(stop_task)
 
 # Generate 4 tasks
 """tasks = ["py_task{}".format(i) for i in range(1, 5)]
