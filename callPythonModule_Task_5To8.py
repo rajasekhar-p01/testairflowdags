@@ -31,8 +31,8 @@ dag = DAG(
 )
 resource1={"request_memory":"5Mi","request_cpu":"2m","limit_memory":"50Mi","limit_cpu":"10m"}
 
-def pull_secret_value(ti,**context):
-    """KVUri = f"https://airflow-key-vault.vault.azure.net"
+def pull_secret_value():#(ti,**context):
+    KVUri = f"https://airflow-key-vault.vault.azure.net"
     credential = ClientSecretCredential('cbf850c9-ee20-4a40-8e9d-4766fbb2a17a', '8d4d448d-4b4d-42e1-9bb9-41f90e8f1636', '.V7xf9UbEt.mf6~Er2mzbuRH6_BDtcMyv~')
     client = SecretClient(vault_url=KVUri, credential=credential)
     secretName="postgresDBpassword"
@@ -40,9 +40,9 @@ def pull_secret_value(ti,**context):
     print(f"Your secret is '{retrieved_secret.value}'.")
     secret_value_op = retrieved_secret.value
     #l=[]
-    return retrieved_secret.value"""
-    uuid_val = context['dag_run'].conf['uuid']
-    ti.xcom_push(key = 'uuid_key', value = uuid_val)
+    return retrieved_secret.value
+    """uuid_val = context['dag_run'].conf['uuid']
+    ti.xcom_push(key = 'uuid_key', value = uuid_val)"""
 
 # Generate 4 tasks
 #tasks = ["python_taks{}".format(i) for i in range(60, 120)]
@@ -60,7 +60,7 @@ org_node = KubernetesPodOperator(
         image_pull_policy="Always",
         resources=resource1,
         name="python_task",
-        task_id= '{{do_xcom_pull(key = 'uuid_key')}}',#"python",
+        task_id= 'py'+str(python_pull_secret.output),#{{do_xcom_pull(key = 'uuid_key')}}',#"python",
         is_delete_operator_pod=True,
         get_logs=True,
         dag=dag
