@@ -25,7 +25,7 @@ default_args = {
 
 dag = DAG(
     #'callPythonModule_Task_5To8',
-    dag_id = 'call' + '{{ dag_run.conf.uuid_val }}'
+    dag_id = 'call' + '{{ dag_run.conf.uuid_val }}',
     default_args=default_args,
     schedule_interval=None,
     start_date=days_ago(0)
