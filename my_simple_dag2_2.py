@@ -55,13 +55,14 @@ class CustomKubernetesPodOperator(KubernetesPodOperator):
     )
     resource1={"request_memory":"5Mi","request_cpu":"2m","limit_memory":"50Mi","limit_cpu":"10m"}
 
-
     def execute(self, context):
         uuid_val = context['dag_run'].conf.get('uuid')
         params = [f"print('{uuid_val}')"]
         self.arguments.extend(params)
         super().execute(context)
-        
+    
+    example_dag_complete_node1 = DummyOperator(task_id="example_dag_complete", dag=dag,uuid_val=f'{{dag_run.conf.get.uuid }}')
+    
     org_node = KubernetesPodOperator(
         namespace='kube-node-lease',
         image="airflowacrcontainer.azurecr.io/argspython", #memory",
@@ -73,15 +74,16 @@ class CustomKubernetesPodOperator(KubernetesPodOperator):
         image_pull_policy="Always",
         resources=resource1,
         name="python_task",
-        task_id= uuid_val, #'python_task', #+str(int(time.time())), #str(python_pull_secret.output),#{{do_xcom_pull(key = 'uuid_key')}}',#"python",
+        task_id= example_dag_complete_node1.uuid_val, #'python_task', #+str(int(time.time())), #str(python_pull_secret.output),#{{do_xcom_pull(key = 'uuid_key')}}',#"python",
         is_delete_operator_pod=True,
         log_events_on_failure=True,
         get_logs=True,
         dag=dag
     )
-
+    
+    org_node.set_downstream(example_dag_complete_node1)
  #   org_node.set_upstream(python_pull_secret)
- #   org_node.set_downstream(example_dag_complete_node1)
+    
 
 """org_dags = []
 for python_task in tasks:
