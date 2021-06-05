@@ -33,7 +33,7 @@ start_task = DummyOperator(task_id="start", dag=dag)
 def create_kpo_task(current_uuid):
     return KubernetesPodOperator(
         namespace='kube-node-lease',
-        image='{{ dag_run.conf.uuid }}', #"airflowacrcontainer.azurecr.io/argspython",
+        image="airflowacrcontainer.azurecr.io/argspython",
         image_pull_secrets='acrsecret',
         cmds=["python","name.py"],
         arguments=["Pudota","Raja","Sekhar"],
