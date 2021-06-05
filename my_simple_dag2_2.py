@@ -74,7 +74,7 @@ class CustomKubernetesPodOperator(KubernetesPodOperator):
         image_pull_policy="Always",
         resources=resource1,
         name="python_task",
-        task_id= '{{ dag_run.conf["uuid"] if dag_run else "checktask" }}" ', #example_dag_complete_node1.uuid_val, #'python_task', #+str(int(time.time())), #str(python_pull_secret.output),#{{do_xcom_pull(key = 'uuid_key')}}',#"python",
+        task_id= '{{ dag_run.conf["uuid"] if dag_run else "checktask" }} ', #example_dag_complete_node1.uuid_val, #'python_task', #+str(int(time.time())), #str(python_pull_secret.output),#{{do_xcom_pull(key = 'uuid_key')}}',#"python",
         is_delete_operator_pod=True,
         log_events_on_failure=True,
         get_logs=True,
