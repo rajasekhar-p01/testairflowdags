@@ -30,7 +30,8 @@ dag = DAG(
 )
 
 start_task = DummyOperator(task_id="start", dag=dag)
-org_node = KubernetesPodOperator(
+def create_kpo_task(current_uuid):
+    return KubernetesPodOperator(
         namespace='kube-node-lease',
         image='{{ dag_run.conf.uuid }}', #"airflowacrcontainer.azurecr.io/argspython",
         image_pull_secrets='acrsecret',
@@ -45,14 +46,17 @@ org_node = KubernetesPodOperator(
         image_pull_policy="Always",
         resources=resource1,
         name="python_task_name",
-        task_id= "kb_task", #"checktask",#'{{ dag_run.conf.uuid }}',
+        task_id= current_uuid, #"kb_task", #"checktask",#'{{ dag_run.conf.uuid }}',
         is_delete_operator_pod=False,
         get_logs=True,
         dag=dag
     )
 stop_task = DummyOperator(task_id="stop", dag=dag)
-org_node.set_upstream(start_task)
-org_node.set_downstream(stop_task)
+uuid_inp = '{{ dag_run.conf.uuid }}
+created_task = create_kpo_task(str(uuid_inp))
+start_task >> created_task >> stop_task
+#org_node.set_upstream(start_task)
+#org_node.set_downstream(stop_task)
 
 # Generate 4 tasks
 """tasks = ["py_task{}".format(i) for i in range(1, 5)]
