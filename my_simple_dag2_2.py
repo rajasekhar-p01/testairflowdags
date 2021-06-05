@@ -10,6 +10,7 @@ from airflow.operators.python import PythonOperator, PythonVirtualenvOperator
 from azure.keyvault.secrets import SecretClient
 from azure.identity import ClientSecretCredential
 
+
 secret_value_op = ''
 default_args = {
     'owner': 'Myself',
@@ -51,6 +52,14 @@ def pull_secret_value():#(ti,**context):
 example_dag_complete_node1 = DummyOperator(task_id="example_dag_complete", dag=dag)
 python_pull_secret = PythonOperator(task_id="python_pull_secret", python_callable=pull_secret_value, dag=dag)
 
+class CustomKubernetesPodOperator(KubernetesPodOperator):
+
+    def execute(self, context):
+        uuid_val = context['dag_run'].conf.get('uuid')
+        params = [f"print('{uuid_val}')"]
+        self.arguments.extend(params)
+        super().execute(context)
+        
 org_node = KubernetesPodOperator(
         namespace='kube-node-lease',
         image="airflowacrcontainer.azurecr.io/argspython", #memory",
@@ -62,7 +71,7 @@ org_node = KubernetesPodOperator(
         image_pull_policy="Always",
         resources=resource1,
         name="python_task",
-        task_id= 'python_task', #+str(int(time.time())), #str(python_pull_secret.output),#{{do_xcom_pull(key = 'uuid_key')}}',#"python",
+        task_id= uuid_val, #'python_task', #+str(int(time.time())), #str(python_pull_secret.output),#{{do_xcom_pull(key = 'uuid_key')}}',#"python",
         is_delete_operator_pod=True,
         get_logs=True,
         dag=dag
