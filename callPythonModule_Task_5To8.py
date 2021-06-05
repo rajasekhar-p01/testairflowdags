@@ -32,7 +32,7 @@ dag = DAG(
 resource1={"request_memory":"5Mi","request_cpu":"2m","limit_memory":"50Mi","limit_cpu":"10m"}
 
 def pull_secret_value():#(ti,**context):
-    KVUri = f"https://airflow-key-vault.vault.azure.net"
+    """KVUri = f"https://airflow-key-vault.vault.azure.net"
     credential = ClientSecretCredential('cbf850c9-ee20-4a40-8e9d-4766fbb2a17a', '8d4d448d-4b4d-42e1-9bb9-41f90e8f1636', '.V7xf9UbEt.mf6~Er2mzbuRH6_BDtcMyv~')
     client = SecretClient(vault_url=KVUri, credential=credential)
     secretName="postgresDBpassword"
@@ -40,7 +40,8 @@ def pull_secret_value():#(ti,**context):
     print(f"Your secret is '{retrieved_secret.value}'.")
     secret_value_op = retrieved_secret.value
     #l=[]
-    return retrieved_secret.value
+    return retrieved_secret.value"""
+    return "abc"
     """uuid_val = context['dag_run'].conf['uuid']
     ti.xcom_push(key = 'uuid_key', value = uuid_val)"""
 
