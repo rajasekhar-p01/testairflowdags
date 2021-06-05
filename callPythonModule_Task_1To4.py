@@ -44,7 +44,6 @@ org_node = KubernetesPodOperator(
         labels={"foo": "bar"},
         image_pull_policy="Always",
         resources=resource1,
-        env_vars=[my_env_vars],
         name="python_task_name",
         task_id= "kb_task", #"checktask",#'{{ dag_run.conf.uuid }}',
         is_delete_operator_pod=False,
