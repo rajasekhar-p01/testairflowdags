@@ -30,7 +30,7 @@ dag = DAG(
 
 start_task = DummyOperator(task_id="start", dag=dag)
 def create_kpo_task(current_uuid):
-    print("This is the current_UUID:', current_uuid)
+    print("This is the current_UUID:", current_uuid)
     return KubernetesPodOperator(
         namespace='kube-node-lease',
         image="airflowacrcontainer.azurecr.io/argspython",
