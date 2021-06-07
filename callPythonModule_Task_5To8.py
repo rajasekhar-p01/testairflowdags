@@ -62,7 +62,7 @@ org_node = KubernetesPodOperator(
         image_pull_policy="Always",
         resources=resource1,
         name="python_task",
-        task_id= 'python_task', #+str(int(time.time())), #str(python_pull_secret.output),#{{do_xcom_pull(key = 'uuid_key')}}',#"python",
+        task_id= str(python_pull_secret.output), #'python_task', #+str(int(time.time())), #str(python_pull_secret.output),#{{do_xcom_pull(key = 'uuid_key')}}',#"python",
         is_delete_operator_pod=True,
         get_logs=True,
         dag=dag
