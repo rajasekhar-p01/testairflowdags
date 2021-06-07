@@ -7,6 +7,9 @@ from airflow.operators.dummy_operator import DummyOperator
 from airflow.utils.dates import days_ago
 from kubernetes.client.models.v1_env_var import V1EnvVar
 
+def macro_uuid(uuid_name):
+    uuid_value = uuid_name
+    return uuid_value
 
 default_args = {
     'owner': 'Airflow',
@@ -26,7 +29,8 @@ resource1={"request_memory":"5Mi","request_cpu":"2m","limit_memory":"50Mi","limi
 dag = DAG(
     'callPythonModule_Task_1To4',
     default_args=default_args,
-    schedule_interval=None
+    schedule_interval=None,
+    user_defined_macros={'model_image': macro_uuid}
 )
 
 start_task = DummyOperator(task_id="start", dag=dag)
@@ -46,7 +50,7 @@ def create_kpo_task(current_uuid):
         image_pull_policy="Always",
         resources=resource1,
         name="python_task_name",
-        task_id="kb_task", #eval({current_uuid}), #"kb_task", #"checktask",#'{{ dag_run.conf.uuid }}',
+        task_id='{{ model_image(dag_run.conf.uuid_vl) }}',#"kb_task", #eval({current_uuid}), #"kb_task", #"checktask",#'{{ dag_run.conf.uuid }}',
         is_delete_operator_pod=False,
         get_logs=True,
         dag=dag
