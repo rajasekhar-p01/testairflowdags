@@ -33,7 +33,7 @@ start_task = DummyOperator(task_id="start", dag=dag)
 def create_kpo_task(current_uuid):
     #LOGGER = logging.getLogger(__name__)
     #LOGGER.info("__name__ >>> 2 - INFO UUID test")
-    LOGGER.info("This is the current_UUID:", current_uuid)
+    logging.info("This is the current_UUID:", current_uuid)
     return KubernetesPodOperator(
         namespace='kube-node-lease',
         image="airflowacrcontainer.azurecr.io/argspython",
