@@ -46,7 +46,7 @@ def create_kpo_task(current_uuid):
         image_pull_policy="Always",
         resources=resource1,
         name="python_task_name",
-        task_id='tsk-'+ current_uuid, #"kb_task", #"checktask",#'{{ dag_run.conf.uuid }}',
+        task_id=eval('tsk-'+ current_uuid), #"kb_task", #"checktask",#'{{ dag_run.conf.uuid }}',
         is_delete_operator_pod=False,
         get_logs=True,
         dag=dag
