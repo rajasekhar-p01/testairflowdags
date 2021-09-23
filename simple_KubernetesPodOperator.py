@@ -48,5 +48,5 @@ for task in tasks:
         get_logs=True,
         dag=dag
     )
-    org_node.set_downstream(example_dag_start_node)
+    org_node.set_upstream(example_dag_start_node)
     org_node.set_downstream(example_dag_complete_node)
