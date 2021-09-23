@@ -26,27 +26,27 @@ dag = DAG(
 )
 
 # Generate 4 tasks
+example_dag_start_node = DummyOperator(task_id="example_dag_start", dag=dag)
 tasks = ["task{}".format(i) for i in range(1, 5)]
 example_dag_complete_node = DummyOperator(task_id="example_dag_complete", dag=dag)
 
 org_dags = []
 for task in tasks:
 
-    bash_command = 'echo HELLO'
+    #bash_command = 'echo HELLO'
 
     org_node = KubernetesPodOperator(
         namespace='kube-node-lease',
-        image="airflowacrdemocontainer.azurecr.io/argspython",
+        image="demoairflowcontainer.azurecr.io/argspython:latest",
         image_pull_secrets='acrsecret',
-        cmds=["python","name.py"],
+        cmds=["python","argspython.py"],
         arguments=["Raja","Sekhar","Pudota"],
-        labels={"foo": "bar"},
         image_pull_policy="Always",
         name=task,
         task_id=task,
-        is_delete_operator_pod=False,
+        is_delete_operator_pod=True,
         get_logs=True,
         dag=dag
     )
-
+    org_node.set_downstream(example_dag_start_node)
     org_node.set_downstream(example_dag_complete_node)
