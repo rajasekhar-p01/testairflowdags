@@ -43,6 +43,7 @@ for task in tasks:
         arguments=["Raja","Sekhar","Pudota"],
         image_pull_policy="Always",
         name=task,
+        resources={'request_memory':'5Gi','request_cpu':'1000m','limit_memory':'6Gi','limit_cpu':'1200m'},
         task_id=task,
         is_delete_operator_pod=True,
         get_logs=True,
